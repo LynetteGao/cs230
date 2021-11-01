@@ -3,7 +3,8 @@ import re
 from tensorflow.python.keras import backend as K
 from tensorflow.python.keras.layers import Layer
 from tensorflow.python.keras.preprocessing.sequence import pad_sequences
-
+import nltk
+nltk.download('stopwords')
 from nltk.corpus import stopwords
 from gensim.models import KeyedVectors
 
