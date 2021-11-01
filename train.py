@@ -91,8 +91,7 @@ right_input = Input(shape=(max_seq_length,), dtype='int32')
 
 # Pack it all up into a Manhattan Distance model
 malstm_distance = ManDist()([shared_model(left_input), shared_model(right_input)])
-malstm_distance_logits = Dense(1)(malstm_distance)
-model = Model(inputs=[left_input, right_input], outputs=[malstm_distance_logits])
+model = Model(inputs=[left_input, right_input], outputs=[malstm_distance])
 
 #if gpus >= 2:
     # `multi_gpu_model()` is a so quite buggy. it breaks the saved model.
@@ -115,6 +114,10 @@ print("Training time finished.\n%d epochs in %12.2f" % (n_epoch,
 
 # malstm_distance_logits = Dense(1)(malstm_distance)
 # model = Model(inputs=[left_input, right_input], outputs=[malstm_distance_logits])
+
+malstm_distance_logits = Dense(1)(malstm_distance)
+model = Model(inputs=[left_input, right_input], outputs=[malstm_distance_logits])
+
 
 import datetime
 model.save('./'  + str(datetime.datetime.now()) + 'SiameseLSTM.h5')
