@@ -1,7 +1,10 @@
 import pandas as pd
 
 import tensorflow as tf
+import matplotlib
 
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 from util import make_w2v_embeddings
 from util import split_and_zero_padding
 from util import ManDist
