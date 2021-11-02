@@ -17,6 +17,23 @@ from util import make_w2v_embeddings
 from util import split_and_zero_padding
 from util import ManDist
 
+def recall_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    possible_positives = K.sum(K.round(K.clip(y_true, 0, 1)))
+    recall = true_positives / (possible_positives + K.epsilon())
+    return recall
+
+def precision_m(y_true, y_pred):
+    true_positives = K.sum(K.round(K.clip(y_true * y_pred, 0, 1)))
+    predicted_positives = K.sum(K.round(K.clip(y_pred, 0, 1)))
+    precision = true_positives / (predicted_positives + K.epsilon())
+    return precision
+
+def f1_m(y_true, y_pred):
+    precision = precision_m(y_true, y_pred)
+    recall = recall_m(y_true, y_pred)
+    return 2*((precision*recall)/(precision+recall+K.epsilon()))
+
 # File paths
 TRAIN_CSV = "./tsv/train.tsv"
 DEV_CSV = "./tsv/dev.tsv"
@@ -88,7 +105,7 @@ model = Model(inputs=[left_input, right_input], outputs=[malstm_distance])
 #if gpus >= 2:
     # `multi_gpu_model()` is a so quite buggy. it breaks the saved model.
  #   model = tf.keras.utils.multi_gpu_model(model, gpus=gpus)
-model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(), metrics=['accuracy'])
+model.compile(loss='mean_squared_error', optimizer=tf.keras.optimizers.Adam(),  metrics=['acc',f1_m,precision_m, recall_m])
 model.summary()
 shared_model.summary()
 
@@ -125,6 +142,6 @@ plt.legend(['Train', 'Validation'], loc='upper left')
 plt.tight_layout(h_pad=1.0)
 plt.savefig('./history-graph.png')
 
-print(str(malstm_trained.history['val_accuracy'][-1])[:6] +
-      "(max: " + str(max(malstm_trained.history['val_accuracy']))[:6] + ")")
+print(str(malstm_trained.history['val_acc'][-1])[:6] +
+      "(max: " + str(max(malstm_trained.history['val_acc']))[:6] + ")")
 print("Done.")
