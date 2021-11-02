@@ -9,6 +9,20 @@ from util import ManDist
 # File paths
 TEST_CSV = "./tsv/test.tsv"
 M = './SiameseLSTM.h5'
+
+model = tf.keras.models.load_model(M, custom_objects={'ManDist': ManDist})
+model.summary()
+
+print(model.metrics_names)
+
+plt.subplot(211)
+plt.plot(model.history['acc'])
+plt.plot(model.history['val_acc'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+
 # Load training set
 test_df = pd.read_table(TEST_CSV,header = None, names = ['id','qid1','qid2',
                                                               'question1', 'question2','is_duplicate'])
@@ -28,8 +42,7 @@ assert X_test['left'].shape == X_test['right'].shape
 
 # --
 
-model = tf.keras.models.load_model(M, custom_objects={'ManDist': ManDist})
-model.summary()
+
 
 prediction = model.predict([X_test['left'], X_test['right']])
 submission = pd.DataFrame()
