@@ -59,7 +59,7 @@ assert len(X_train['left']) == len(Y_train)
 # Model variables
 gpus = 1
 batch_size = 1024 * gpus
-n_epoch = 20
+n_epoch = 1 #20
 n_hidden = 50
 
 # Define the shared model
@@ -101,16 +101,7 @@ training_end_time = time()
 print("Training time finished.\n%d epochs in %12.2f" % (n_epoch,
                                                         training_end_time - training_start_time))
 
-model.save('./SiameseLSTM.h5')
-
-# Plot accuracy
-plt.subplot(211)
-plt.plot(malstm_trained.history['accuracy'])
-plt.plot(malstm_trained.history['val_accuracy'])
-plt.title('Model Accuracy')
-plt.ylabel('Accuracy')
-plt.xlabel('Epoch')
-plt.legend(['Train', 'Validation'], loc='upper left')
+model.save('./SiameseLSTM2.h5')
 
 # Plot loss
 plt.subplot(212)
@@ -120,6 +111,16 @@ plt.title('Model Loss')
 plt.ylabel('Loss')
 plt.xlabel('Epoch')
 plt.legend(['Train', 'Validation'], loc='upper right')
+
+# Plot accuracy
+plt.subplot(211)
+plt.plot(model.history['acc'])
+plt.plot(model.history['val_acc'])
+plt.title('Model Accuracy')
+plt.ylabel('Accuracy')
+plt.xlabel('Epoch')
+plt.legend(['Train', 'Validation'], loc='upper left')
+
 
 plt.tight_layout(h_pad=1.0)
 plt.savefig('./history-graph.png')
