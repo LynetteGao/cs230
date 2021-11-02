@@ -100,8 +100,7 @@ malstm_trained = model.fit([X_train['left'], X_train['right']], Y_train,
 training_end_time = time()
 print("Training time finished.\n%d epochs in %12.2f" % (n_epoch,
                                                         training_end_time - training_start_time))
-print(malstm_trained.history)
-print(malstm_trained.history.history)
+
 model.save('./SiameseLSTM2.h5')
 
 # Plot loss
@@ -115,8 +114,8 @@ plt.legend(['Train', 'Validation'], loc='upper right')
 
 # Plot accuracy
 plt.subplot(211)
-plt.plot(model.history['acc'])
-plt.plot(model.history['val_acc'])
+plt.plot(malstm_trained.history['acc'])
+plt.plot(malstm_trained.history['val_acc'])
 plt.title('Model Accuracy')
 plt.ylabel('Accuracy')
 plt.xlabel('Epoch')
