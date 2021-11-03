@@ -180,5 +180,5 @@ assert len(X_test['left']) == len(Y_test)
 
 
 prediction = model.predict([X_test['left'], X_test['right']])
-loss, accuracy, f1_score, precision, recall = model.evaluate(Xtest, ytest, verbose=0)
+loss, accuracy, f1_score, precision, recall = model.evaluate(X_test, Y_test, verbose=0)
 print(prediction)
