@@ -76,7 +76,7 @@ assert len(X_train['left']) == len(Y_train)
 # Model variables
 gpus = 1
 batch_size = 1024 * gpus
-n_epoch = 1 #20
+n_epoch = 20 #20
 n_hidden = 50
 
 # Define the shared model
