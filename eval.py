@@ -7,8 +7,12 @@ from util import split_and_zero_padding
 from util import ManDist
 
 # File paths
-
+M = './SiameseLSTM2.h5'
 TEST_CSV = "./tsv/test.tsv"
+
+model = tf.keras.models.load_model(M, custom_objects={'ManDist': ManDist})
+model.summary()
+
 
 # Load training set
 test_df = pd.read_table(TEST_CSV,header = None, names = ['id','qid1','qid2',
@@ -24,13 +28,13 @@ test_df, embeddings = make_w2v_embeddings(test_df, embedding_dim=embedding_dim, 
 
 # Split to dicts and append zero padding.
 X_test = split_and_zero_padding(test_df, max_seq_length)
+Y_test = test_df['is_duplicate'].values
 
 # Make sure everything is ok
 assert X_test['left'].shape == X_test['right'].shape
+assert len(X_test['left']) == len(Y_test)
 
-
-model = tf.keras.models.load_model('./data/SiameseLSTM.h5', custom_objects={'ManDist': ManDist})
-model.summary()
 
 prediction = model.predict([X_test['left'], X_test['right']])
+loss, accuracy, f1_score, precision, recall = model.evaluate(Xtest, ytest, verbose=0)
 print(prediction)
